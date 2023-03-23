@@ -155,12 +155,30 @@ def merge_sort(data: list, left, right):
 
 def bubble_sort(data: list):
     length = len(data)
-    for i in range( 0 , length- 1 ):
-        for j in range( 0 , length- i- 1 ):
-            if data[ j] > data[ j+ 1 ]:
-                flag = data[ j]
-                data[ j] = data[ j+ 1 ]
-                data[ j+ 1 ] = flag
+    for i in range(0, length - 1):
+        for j in range(0, length - i - 1):
+            if data[j] > data[j + 1]:
+                flag = data[j]
+                data[j] = data[j + 1]
+                data[j + 1] = flag
+
+
+def shell_sort(data: list):
+    length = len(data)
+    gap = int(length / 2)
+    while gap > 0:
+        for i in range(gap, length):
+            j = i
+            while j - gap >= 0 and data[j] < data[j - gap]:
+                swap(data, j, j - gap)
+                j = j - gap
+        gap = int(gap / 2)
+
+
+def swap(array, a, b):
+    array[a] = array[a] + array[b]
+    array[b] = array[a] - array[b]
+    array[a] = array[a] - array[b]
 
 
 @timer_calc
@@ -170,15 +188,18 @@ def call_sort(sort: dict, data: list):
 
 
 def main():
+    # data = np.random.randint(100, size=1000)
     sorts = [
         {"name": "Selection Sort", "sort": lambda arr: selection_sort(data)},
         {"name": "Insertion Sort", "sort": lambda arr: insertion_sort(data)},
         {"name": "Counting Sort", "sort": lambda arr: counting_sort(data)},
         {"name": "Merge Sort", "sort": lambda arr: merge_sort(arr, 0, len(arr) - 1)},
         {"name": "Quick Sort", "sort": lambda arr: quick_sort(data, 0, len(data) - 1)},
-        {"name": "Bubble Sort", "sort": lambda arr: bubble_sort(data)}
+        {"name": "Bubble Sort", "sort": lambda arr: bubble_sort(data)},
+        {"name": "Shell Sort", "sort": lambda arr: shell_sort(data)},
     ]
 
+    # plot_allsorts(sorts)
     # 1000 elements to 10000 elements
     x_axe = np.array([i * 1000 for i in range(1, 10)])
     plt.xlabel("List Length")
@@ -200,6 +221,10 @@ def main():
     plt.grid()
     plt.legend()
     plt.show()
+
+    # data = [9,6,58,0,7,4,3,1,2]
+    # call_sort(sorts[6],data)
+    # print(data)
 
 
 if __name__ == "__main__":

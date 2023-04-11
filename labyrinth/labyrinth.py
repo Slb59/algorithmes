@@ -1,19 +1,38 @@
 import random
+import turtle
+import math
 
 class Cell:
     def __init__(self,zone) -> None:
         self.east = True
         self.south = True
         self.zone = zone 
+        self.is_cheese = False
+        self.is_mouse = False
 
     def __str__(self) -> str:
         result = ''
-        # result += str(self.zone)
         result += f"{'_' if self.south else ' '}" + f"{'|' if self.east else ' '}" 
         return result
     
+    def drawcell(self,t:turtle.Turtle,s):
+        if self.south:
+            t.pensize(10)
+        else:
+            t.pensize(1)
+        t.forward(s)
+        t.left(90)
+        if self.east:
+            t.pensize(10)
+        else:
+            t.pensize(1)
+        t.forward(s)
+    
 
 class Labyrinth:
+
+    cellsize=50
+
     def __init__(self, h, w) -> None:
         self.height = h
         self.width = w
@@ -21,6 +40,9 @@ class Labyrinth:
         for i in range(self.height):
             line = [Cell(i*self.width+j) for j in range(self.width)]
             self.cells.append(line) 
+
+        self.mouses = []
+        self.cheeses = []
 
     def lab(self) -> list:
         return self.cells
@@ -35,6 +57,33 @@ class Labyrinth:
             result += ('\n')
         return result
     
+    def drawlab(self,t:turtle.Turtle):
+        
+        t.up()
+        pos = (-self.cellsize*(self.width/2),self.cellsize*(self.height/2))
+        t.goto(pos)
+        t.down()
+        # draw up wall
+        t.pensize(10)
+        for _ in range(self.width):
+            t.forward(self.cellsize)
+        
+        for i in range(self.height):
+            for j in range(self.width):
+                t.up()
+                t.goto(pos[0]+self.cellsize*j,pos[1]-self.cellsize*i)
+                t.setheading(270)
+                if j==0:
+                    t.pensize(10)
+                else:
+                    t.pensize(1)
+                    
+                t.down()
+                t.forward(self.cellsize)
+                # draw cell
+                t.setheading(0)
+                self.cells[i][j].drawcell(t,self.cellsize)
+
     def all_walls(self) ->list:
         """ Give the list of all walls """
         walls = []

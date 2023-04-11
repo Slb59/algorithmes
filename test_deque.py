@@ -1,7 +1,7 @@
-from collections import deque
+from pythonds.basic import Deque
 
 def green_path(map):
-    green_path_queue = deque([map[0][0]])
+    green_path_queue = Deque([map[0][0]])
     i=0
     for i in range(0,len(map),2):
         green_path_queue.extend(map[i][1:])
@@ -31,6 +31,22 @@ def main():
     print(len(green_gardian_path))
     print(green_gardian_path[71])
     print(forward(4,green_gardian_pos,green_gardian_path))
+
+def palchecker(aString):
+    chardeque = Deque()
+
+    for ch in aString:
+        chardeque.addRear(ch)
+
+    stillEqual = True
+
+    while chardeque.size() > 1 and stillEqual:
+        first = chardeque.removeFront()
+        last = chardeque.removeRear()
+        if first != last:
+            stillEqual = False
+
+    return stillEqual
 
 if __name__ == "__main__":
     main()
